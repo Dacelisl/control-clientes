@@ -1,5 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { environment } from "../environments/environment";
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule,  } from '@angular/fire/compat/firestore';
+import { AngularFireAuthModule } from "@angular/fire/compat/auth";
+
+
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,6 +19,9 @@ import { LoginComponent } from './components/login/login.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { RegistroComponent } from './components/registro/registro.component';
 import { TableroComponent } from './components/tablero/tablero.component';
+import { FormsModule } from '@angular/forms';
+import { ClienteService } from './services/cliente.service';
+import { FlashMessagesModule } from 'flash-messages-angular';
 
 @NgModule({
   declarations: [
@@ -28,9 +38,14 @@ import { TableroComponent } from './components/tablero/tablero.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    FlashMessagesModule.forRoot(),
+    AngularFireModule.initializeApp(environment.firebaseConfig,'control-clientes'),
+    AngularFirestoreModule,
+    AngularFireAuthModule
   ],
-  providers: [],
+  providers: [ClienteService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
