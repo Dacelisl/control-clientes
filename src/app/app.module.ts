@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { environment } from "../environments/environment";
-import { AngularFireModule } from '@angular/fire/compat';
+/* import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule,  } from '@angular/fire/compat/firestore';
-import { AngularFireAuthModule } from "@angular/fire/compat/auth";
-
-
-
+import { AngularFireAuthModule } from "@angular/fire/compat/auth"; */
+import { provideFirebaseApp, initializeApp } from "@angular/fire/app";
+import { getFirestore, provideFirestore } from "@angular/fire/firestore";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -41,9 +40,11 @@ import { FlashMessagesModule } from 'flash-messages-angular';
     AppRoutingModule,
     FormsModule,
     FlashMessagesModule.forRoot(),
-    AngularFireModule.initializeApp(environment.firebaseConfig,'control-clientes'),
+   /*  AngularFireModule.initializeApp(environment.firebaseConfig,'control-clientes'),
     AngularFirestoreModule,
-    AngularFireAuthModule
+    AngularFireAuthModule */
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideFirestore(() => getFirestore()),
   ],
   providers: [ClienteService],
   bootstrap: [AppComponent]

@@ -1,15 +1,33 @@
 import { Injectable } from '@angular/core';
-import {
+/* import {
   AngularFirestoreCollection,
   AngularFirestoreDocument,
   AngularFirestore,
-} from '@angular/fire/compat/firestore';
-import { map, Observable } from 'rxjs';
+} from '@angular/fire/compat/firestore'; */
+import {
+  Firestore,
+  addDoc,
+  collection,
+  collectionData,
+  doc,
+  docData,
+  deleteDoc,
+  updateDoc,
+  DocumentReference,
+  setDoc,
+  deleteField,
+} from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 import { Cliente } from '../model/cliente.model';
 
 @Injectable()
 export class ClienteService {
-  clientesCollection: AngularFirestoreCollection<Cliente>;
+  clientes: Observable<Cliente[]>;
+  clienteDelet : DocumentReference;
+  clienteRef;
+
+  //operaciones con angularfire compat
+  /* clientesCollection: AngularFirestoreCollection<Cliente>;
   clienteDoc: AngularFirestoreDocument<Cliente>;
   clientes: Observable<Cliente[]>;
   cliente: Observable<Cliente>;
@@ -50,5 +68,31 @@ export class ClienteService {
       })
     );
     return this.cliente;
+  } */
+  constructor(private firestore: Firestore) {
+    this.clienteRef = collection(this.firestore, 'clientes');
+  }
+
+  getClientes(): Observable<Cliente[]> {
+    return collectionData(this.clienteRef, { idField: 'id' }) as Observable<
+      Cliente[]
+    >;
+  }
+  agregarCliente(cliente: Cliente) {
+    return addDoc(this.clienteRef, cliente);
+  }
+  getCliente(id: string) {
+    const clienteRef = doc(this.clienteRef,`/${id}`)
+    return docData(clienteRef, {idField:'id'}) as Observable<Cliente>
+  }
+
+  deleteCliente(cliente: string){  
+    let clienteRef = doc(this.clienteRef,`/${cliente}`);
+    return deleteDoc(clienteRef)
+  }
+
+  modificar(cliente:Cliente){
+    const clienteRef = doc(this.clienteRef, `/${cliente.id}`);
+    return setDoc(clienteRef, cliente);
   }
 }
